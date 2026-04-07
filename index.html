@@ -133,7 +133,57 @@ footer{padding:2rem;text-align:center;font-size:0.75rem;color:var(--light-gray);
 .animate{opacity:0;transform:translateY(30px)}
 .animate.visible{animation:fadeUp 0.7s ease forwards}
 .animate.d1{animation-delay:0.1s}.animate.d2{animation-delay:0.2s}.animate.d3{animation-delay:0.3s}
-@media(max-width:640px){.hero-stats{gap:2rem}.hero h1{font-size:2.4rem}.state-panel-header{padding:1.5rem}.facility-list{padding:1rem 1.5rem}.savings-banner{flex-direction:column;text-align:center}}
+@media(max-width:768px){
+  .hero{padding:2rem 1.25rem;min-height:85vh}
+  .hero h1{font-size:2.2rem;margin-bottom:1rem}
+  .hero-sub{font-size:0.95rem;margin-bottom:2rem}
+  .hero-badge{margin-bottom:1.5rem;font-size:0.65rem}
+  .hero-stats{gap:1.2rem 2rem}
+  .hero-stat-num{font-size:1.8rem}
+  .hero-stat-label{font-size:0.62rem}
+  .hero-scroll{display:none}
+  section{padding:3.5rem 1.25rem}
+  .section-title{font-size:1.7rem}
+  .section-desc{font-size:0.92rem;margin-bottom:2rem}
+  .findings-grid{grid-template-columns:1fr;gap:1rem}
+  .finding-card{padding:1.5rem}
+  .finding-num{font-size:2.2rem}
+  .cost-grid{grid-template-columns:1fr;gap:1.25rem}
+  .cost-card{padding:1.75rem}
+  .cost-card h3{font-size:1.4rem}
+  .cost-card .price{font-size:2.2rem}
+  .cost-card li{font-size:0.82rem}
+  .savings-banner{flex-direction:column;text-align:center;padding:1.5rem}
+  .savings-banner h3{font-size:1.2rem}
+  .savings-banner .amount{font-size:1.8rem}
+  .map-wrapper{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .us-map{min-width:600px}
+  .map-legend{gap:1rem;flex-wrap:wrap;justify-content:center}
+  .map-legend-item{font-size:0.7rem}
+  .state-panel-header{padding:1.25rem;flex-direction:column;align-items:flex-start}
+  .state-panel-stats{gap:1.25rem}
+  .state-panel-title{font-size:1.4rem}
+  .state-panel-close{position:absolute;top:1rem;right:1rem}
+  .facility-list{padding:1rem 1.25rem}
+  .facility-header{flex-direction:column;gap:0.4rem}
+  .quote{padding:0.65rem 1rem;font-size:0.82rem}
+  .state-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:0.6rem}
+  .state-btn{padding:0.8rem}
+  .state-btn-name{font-size:0.82rem}
+  .state-btn-info{font-size:0.7rem}
+  .cta{padding:4rem 1.25rem}
+  .cta h2{font-size:1.7rem}
+  .cta p{font-size:0.92rem}
+  .cta-btn{padding:0.9rem 2rem;font-size:0.92rem;width:100%;justify-content:center}
+}
+@media(max-width:380px){
+  .hero h1{font-size:1.8rem}
+  .hero-stats{gap:1rem 1.5rem}
+  .hero-stat-num{font-size:1.5rem}
+  .finding-num{font-size:1.8rem}
+  .cost-card .price{font-size:1.8rem}
+  .state-grid{grid-template-columns:1fr 1fr}
+}
 </style>
 </head>
 <body>
