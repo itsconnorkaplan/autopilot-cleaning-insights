@@ -42,8 +42,8 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
 .hero-stat-label{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.4);margin-top:0.5rem;display:block}
 .hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);z-index:2;color:rgba(255,255,255,0.3);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:0.8rem;cursor:pointer;text-decoration:none}
 .hero-scroll span{width:1px;height:40px;background:linear-gradient(to bottom,rgba(255,255,255,0.3),transparent)}
-.hero-cta-mobile{display:none;padding:0.9rem 2rem;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:var(--sans);font-size:0.95rem;font-weight:600;text-decoration:none;text-align:center;transition:all 0.3s;margin-top:1.5rem}
-.hero-cta-mobile:hover{background:var(--accent-light);transform:translateY(-2px);box-shadow:0 8px 30px rgba(200,66,44,0.3)}
+.hero-cta-mobile{display:none;padding:0.9rem 2rem;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:var(--sans);font-size:0.95rem;font-weight:600;text-decoration:none;text-align:center;transition:all 0.3s}
+.hero-cta-mobile:hover{background:var(--accent-light)}
 section{padding:6rem 2rem}.container{max-width:1100px;margin:0 auto}
 .section-label{font-size:0.7rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;display:flex;align-items:center;gap:0.75rem}
 .section-label::before{content:'';width:24px;height:1px;background:var(--accent)}
@@ -136,7 +136,7 @@ footer{padding:2rem;text-align:center;font-size:0.75rem;color:var(--light-gray);
 .animate.visible{animation:fadeUp 0.7s ease forwards}
 .animate.d1{animation-delay:0.1s}.animate.d2{animation-delay:0.2s}.animate.d3{animation-delay:0.3s}
 @media(max-width:768px){
-  .hero-cta-mobile{display:inline-block;width:100%}
+  .hero-cta-mobile{display:block;width:100%;margin:0 auto 2rem;max-width:320px}
   .hero{padding:2rem 1.25rem;min-height:85vh}
   .hero h1{font-size:2.2rem;margin-bottom:1rem}
   .hero-sub{font-size:0.95rem;margin-bottom:2rem}
@@ -196,6 +196,7 @@ footer{padding:2rem;text-align:center;font-size:0.75rem;color:var(--light-gray);
     <div class="hero-badge animate visible">2026 Industry Report</div>
     <h1 class="animate visible d1">The Hidden Cost of<br><em>Dirty Courts</em></h1>
     <p class="hero-sub animate visible d2">A data-driven analysis of cleaning and hygiene reviews across 1,000 top indoor pickleball facilities in the United States.</p>
+    <a href="https://meetings-na2.hubspot.com/aziz-sorisho/book-a-call-with-autopilot-aziz-clone" target="_blank" rel="noopener" class="hero-cta-mobile animate visible d2">Chat with a Cleaning Specialist &rarr;</a>
     <div class="hero-stats animate visible d3">
       <div class="hero-stat"><span class="hero-stat-num" data-count="1000">0</span><span class="hero-stat-label">Facilities Analyzed</span></div>
       <div class="hero-stat"><span class="hero-stat-num" data-count="770">0</span><span class="hero-stat-label">Reviews Extracted</span></div>
@@ -203,7 +204,6 @@ footer{padding:2rem;text-align:center;font-size:0.75rem;color:var(--light-gray);
       <div class="hero-stat"><span class="hero-stat-num">51</span><span class="hero-stat-label">States Covered</span></div>
     </div>
   </div>
-  <a href="https://meetings-na2.hubspot.com/aziz-sorisho/book-a-call-with-autopilot-aziz-clone" target="_blank" rel="noopener" class="hero-cta-mobile animate visible d3">Chat with a Cleaning Specialist &rarr;</a>
   <a href="#findings" class="hero-scroll">Scroll<span></span></a>
 </section>
 
