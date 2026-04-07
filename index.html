@@ -128,6 +128,7 @@ section{padding:6rem 2rem}.container{max-width:1100px;margin:0 auto}
 .cta-btn{display:inline-flex;align-items:center;gap:0.75rem;padding:1rem 2.5rem;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:var(--sans);font-size:1rem;font-weight:600;cursor:pointer;transition:all 0.3s;text-decoration:none}
 .cta-btn:hover{background:var(--accent-light);transform:translateY(-2px);box-shadow:0 8px 30px rgba(200,66,44,0.3)}
 footer{padding:2rem;text-align:center;font-size:0.75rem;color:var(--light-gray);background:var(--ink)}
+.facility-name{font-weight:700;font-size:1rem;color:var(--warm-gray)}
 @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
 .animate{opacity:0;transform:translateY(30px)}
 .animate.visible{animation:fadeUp 0.7s ease forwards}
@@ -218,6 +219,28 @@ footer{padding:2rem;text-align:center;font-size:0.75rem;color:var(--light-gray);
 <script>
 (function(){
   var DATA=null,SL={};
+  var SB_URL="https://gahejorqvonkonivdmxf.supabase.co";
+  var SB_ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdhaGVqb3Jxdm9ua29uaXZkbXhmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUxMzUzMTQsImV4cCI6MjA5MDcxMTMxNH0.YKkqWmDcXgzYCQkr7-bAQdHz4u5qfBO3xMdxRWWSLr0";
+  var VID=localStorage.getItem("ap_vid")||("v_"+Math.random().toString(36).substr(2,9));
+  localStorage.setItem("ap_vid",VID);
+  var SESSION_START=Date.now();
+
+  function trackEvent(type,data){
+    fetch(SB_URL+"/rest/v1/cleaning_insights_events",{
+      method:"POST",headers:{"apikey":SB_ANON,"Authorization":"Bearer "+SB_ANON,"Content-Type":"application/json","Prefer":"return=minimal"},
+      body:JSON.stringify({event_type:type,event_data:data||{},visitor_id:VID,page_url:location.href,referrer:document.referrer,user_agent:navigator.userAgent})
+    }).catch(function(){});
+  }
+
+  function trackSession(){
+    fetch(SB_URL+"/rest/v1/cleaning_insights_sessions",{
+      method:"POST",headers:{"apikey":SB_ANON,"Authorization":"Bearer "+SB_ANON,"Content-Type":"application/json","Prefer":"return=minimal"},
+      body:JSON.stringify({visitor_id:VID,referrer:document.referrer,user_agent:navigator.userAgent})
+    }).catch(function(){});
+  }
+
+  trackEvent("page_view",{});
+  trackSession();
   var MP={"AL":"M628,432L632,479L632,481L614,483L612,477L608,482L609,432Z","AK":"M161,485L163,540L118,540L80,539L80,497L99,497L100,485ZM68,508L85,508L88,539L53,539Z","AZ":"M205,391L252,397L243,454L196,447L183,425L186,391Z","AR":"M564,400L609,397L612,440L609,432L563,436Z","CA":"M124,297L138,296L158,330L170,360L183,391L183,425L155,433L127,408L108,367L107,330L113,300Z","CO":"M298,300L370,305L367,347L295,342Z","CT":"M834,205L851,198L858,215L841,221Z","DE":"M803,278L815,272L815,293L803,298Z","FL":"M667,467L715,446L740,468L738,502L710,526L680,511L663,487Z","GA":"M660,395L700,395L700,446L667,467L650,447L645,421Z","HI":"M270,520L295,520L295,545L270,545Z","ID":"M210,176L238,172L253,237L230,278L205,258L198,207Z","IL":"M580,260L600,260L608,310L608,350L595,367L576,348L570,300Z","IN":"M618,262L642,260L645,340L618,345L612,300Z","IA":"M510,240L560,240L570,280L565,300L510,295L500,268Z","KS":"M395,330L490,335L490,370L392,366Z","KY":"M618,345L690,330L700,355L670,367L636,370L618,365Z","LA":"M564,462L600,450L612,477L600,500L570,500L555,480Z","ME":"M865,105L885,90L890,145L872,175L855,155Z","MD":"M753,280L800,268L815,293L803,298L780,300L753,290Z","MA":"M842,190L880,180L880,200L851,198L841,200Z","MI":"M595,175L630,165L655,195L650,240L620,250L615,218L590,210ZM585,210L595,175L575,170L563,195Z","MN":"M480,120L535,118L543,195L510,210L488,200L478,152Z","MS":"M595,400L614,400L614,465L600,480L595,465L585,445Z","MO":"M510,320L565,320L575,380L565,400L530,395L508,380L505,345Z","MT":"M260,115L350,118L348,180L260,178Z","NE":"M365,260L460,262L462,300L460,310L365,305Z","NV":"M155,230L198,232L198,335L183,350L155,320Z","NH":"M855,130L867,125L870,175L857,185L850,155Z","NJ":"M803,235L818,228L822,268L810,285L800,268Z","NM":"M252,397L305,400L305,460L248,455Z","NY":"M750,160L830,145L842,190L834,205L810,215L790,225L760,215L745,195Z","NC":"M660,360L755,345L770,368L730,388L700,395L660,395Z","ND":"M370,120L460,120L460,175L370,178Z","OH":"M650,250L695,245L700,300L690,330L653,340L642,295Z","OK":"M370,375L440,370L490,370L492,405L450,408L392,405L370,395Z","OR":"M108,155L170,152L170,205L155,230L125,225L108,200Z","PA":"M720,220L800,210L803,260L775,270L753,270L720,260Z","RI":"M855,200L865,197L866,212L856,215Z","SC":"M700,395L735,380L745,410L720,425L700,415Z","SD":"M370,178L460,175L462,240L365,240L365,200Z","TN":"M618,365L700,355L702,382L695,395L660,395L630,395L615,390Z","TX":"M340,415L440,410L492,405L500,455L490,500L460,530L405,540L360,510L335,480L340,440Z","UT":"M210,260L268,265L265,340L238,342L210,335Z","VT":"M842,120L855,115L857,175L842,185Z","VA":"M690,310L770,300L782,325L770,345L755,345L700,355L690,330Z","WA":"M135,85L190,82L195,150L165,155L130,142Z","WV":"M700,295L730,280L745,310L740,335L720,340L700,330Z","WI":"M530,145L575,140L595,175L585,210L575,215L560,215L543,195Z","WY":"M270,192L350,195L348,260L268,258Z","DC":"M775,292L780,288L783,295L778,298Z"};
 
   function buildMap(){var svg=document.getElementById('usMap');Object.keys(MP).forEach(function(a){var p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',MP[a]);p.setAttribute('data-state',a);p.addEventListener('click',function(){openState(a)});var t=document.createElementNS('http://www.w3.org/2000/svg','title');t.textContent=a;p.appendChild(t);svg.appendChild(p)})}
@@ -228,6 +251,7 @@ footer{padding:2rem;text-align:center;font-size:0.75rem;color:var(--light-gray);
 
   function openState(abbr){
     var state=SL[abbr];if(!state||state.facilities.length===0)return;
+    trackEvent("state_click",{state:abbr,state_name:state.name,neg:state.neg});
     document.getElementById('panelTitle').textContent=state.name||abbr;
     document.getElementById('panelCourts').textContent=state.courts;
     document.getElementById('panelNeg').textContent=state.neg;
@@ -238,8 +262,8 @@ footer{padding:2rem;text-align:center;font-size:0.75rem;color:var(--light-gray);
       var fd=document.createElement('div');fd.className='facility';
       var hd=document.createElement('div');hd.className='facility-header';
       var lf=document.createElement('div');
-      var nm=document.createElement('div');nm.className='facility-name';nm.textContent=f.name;
-      var mt=document.createElement('div');mt.className='facility-meta';mt.textContent=f.city+' \u00B7 '+f.courts+' indoor courts';
+      var nm=document.createElement('div');nm.className='facility-name';nm.textContent='Indoor Facility in '+f.city;
+      var mt=document.createElement('div');mt.className='facility-meta';mt.textContent=f.courts+' indoor courts';
       lf.appendChild(nm);lf.appendChild(mt);
       var rt=document.createElement('div');
       if(f.rating){var ra=document.createElement('span');ra.className='facility-rating';ra.textContent=f.rating+' \u2605';rt.appendChild(ra);rt.appendChild(document.createTextNode(' '))}
@@ -265,6 +289,28 @@ footer{padding:2rem;text-align:center;font-size:0.75rem;color:var(--light-gray);
 
   var obs=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting)en.target.classList.add('visible')})},{threshold:0.1});
   document.querySelectorAll('.animate').forEach(function(el){obs.observe(el)});
+
+  // Track CTA clicks
+  document.querySelector('.cta-btn').addEventListener('click',function(){trackEvent('cta_click',{button:'book_demo'})});
+
+  // Track scroll depth
+  var maxScroll=0;
+  window.addEventListener('scroll',function(){
+    var pct=Math.round((window.scrollY/(document.body.scrollHeight-window.innerHeight))*100);
+    if(pct>maxScroll){maxScroll=pct;if(pct===25||pct===50||pct===75||pct===100)trackEvent('scroll_depth',{percent:pct})}
+  });
+
+  // Track time on page when leaving
+  window.addEventListener('beforeunload',function(){
+    var seconds=Math.round((Date.now()-SESSION_START)/1000);
+    trackEvent('session_end',{time_seconds:seconds,max_scroll:maxScroll});
+  });
+
+  // Track section views
+  var sectionObs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){if(e.isIntersecting)trackEvent('section_view',{section:e.target.id||e.target.className})});
+  },{threshold:0.3});
+  document.querySelectorAll('section[id]').forEach(function(el){sectionObs.observe(el)});
 
   buildMap();
   fetch('data.json').then(function(r){return r.json()}).then(function(d){DATA=d;d.states.forEach(function(s){SL[s.abbr]=s});buildStateGrid();colorMap()});
