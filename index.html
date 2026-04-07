@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cleaning Insights Report | Autopilot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0c1117;--paper:#f6f4f0;--cream:#ede9e2;--sand:#d9d3c7;
+  --accent:#c8422c;--accent-light:#e8654f;--accent-dark:#9a2f1e;
+  --teal:#1a6b5a;--teal-light:#2a9b82;
+  --blue:#2c5282;--blue-light:#4a7cc9;
+  --warm-gray:#7a7368;--light-gray:#bfb9ae;
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'Plus Jakarta Sans','Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  background-repeat:repeat;background-size:256px}
+.hero{position:relative;min-height:92vh;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(170deg,var(--ink) 0%,#1a2332 40%,#0f2b2a 70%,#162020 100%);overflow:hidden;padding:3rem}
+.hero::after{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 30% 70%,rgba(42,155,130,0.12),transparent),
+             radial-gradient(ellipse 60% 50% at 75% 25%,rgba(200,66,44,0.08),transparent)}
+.hero-content{position:relative;z-index:2;max-width:900px;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:0.5rem;padding:0.45rem 1.2rem;
+  border:1px solid rgba(255,255,255,0.15);border-radius:100px;
+  color:rgba(255,255,255,0.6);font-size:0.75rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:2.5rem;backdrop-filter:blur(8px);background:rgba(255,255,255,0.04)}
+.hero h1{font-family:var(--serif);font-size:clamp(2.8rem,6vw,5.2rem);color:#fff;line-height:1.08;margin-bottom:1.5rem;font-weight:400}
+.hero h1 em{font-style:italic;color:var(--accent-light)}
+.hero-sub{font-size:1.15rem;color:rgba(255,255,255,0.55);max-width:600px;margin:0 auto 3rem;line-height:1.7}
+.hero-stats{display:flex;justify-content:center;gap:4rem;flex-wrap:wrap}
+.hero-stat{text-align:center}
+.hero-stat-num{font-family:var(--mono);font-size:2.4rem;font-weight:500;color:#fff;display:block;line-height:1}
+.hero-stat-label{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.4);margin-top:0.5rem;display:block}
+.hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);z-index:2;color:rgba(255,255,255,0.3);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:0.8rem;cursor:pointer;text-decoration:none}
+.hero-scroll span{width:1px;height:40px;background:linear-gradient(to bottom,rgba(255,255,255,0.3),transparent)}
+section{padding:6rem 2rem}.container{max-width:1100px;margin:0 auto}
+.section-label{font-size:0.7rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;display:flex;align-items:center;gap:0.75rem}
+.section-label::before{content:'';width:24px;height:1px;background:var(--accent)}
+.section-title{font-family:var(--serif);font-size:clamp(2rem,4vw,3rem);line-height:1.15;margin-bottom:1rem}
+.section-desc{font-size:1.05rem;color:var(--warm-gray);max-width:650px;line-height:1.7;margin-bottom:3rem}
+.findings{background:var(--cream)}
+.findings-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem}
+.finding-card{background:var(--paper);border-radius:12px;padding:2.2rem;position:relative;overflow:hidden;border:1px solid rgba(0,0,0,0.04);transition:transform 0.3s,box-shadow 0.3s}
+.finding-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,0.06)}
+.finding-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.finding-card:nth-child(1)::before{background:var(--accent)}
+.finding-card:nth-child(2)::before{background:var(--teal)}
+.finding-card:nth-child(3)::before{background:var(--blue)}
+.finding-num{font-family:var(--mono);font-size:3rem;font-weight:500;line-height:1;margin-bottom:0.3rem}
+.finding-card:nth-child(1) .finding-num{color:var(--accent)}
+.finding-card:nth-child(2) .finding-num{color:var(--teal)}
+.finding-card:nth-child(3) .finding-num{color:var(--blue)}
+.finding-label{font-size:0.95rem;font-weight:600;margin-bottom:0.5rem}
+.finding-desc{font-size:0.85rem;color:var(--warm-gray);line-height:1.6}
+.cost-section{background:var(--paper)}
+.cost-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:3rem}
+@media(max-width:768px){.cost-grid{grid-template-columns:1fr}}
+.cost-card{padding:2.5rem;border-radius:12px}
+.cost-card.manual{background:linear-gradient(135deg,#2a1517,#1a0d0e);color:#fff}
+.cost-card.auto{background:linear-gradient(135deg,#0f2924,#0a1f1a);color:#fff}
+.cost-card-label{font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:1.5rem;opacity:0.5}
+.cost-card h3{font-family:var(--serif);font-size:1.8rem;margin-bottom:1rem}
+.cost-card .price{font-family:var(--mono);font-size:2.8rem;font-weight:500;margin-bottom:0.3rem}
+.cost-card.manual .price{color:var(--accent-light)}
+.cost-card.auto .price{color:var(--teal-light)}
+.cost-card .price-sub{font-size:0.8rem;opacity:0.5;margin-bottom:1.5rem}
+.cost-card ul{list-style:none;padding:0}
+.cost-card li{font-size:0.88rem;padding:0.45rem 0;border-top:1px solid rgba(255,255,255,0.08);opacity:0.7;display:flex;align-items:center;gap:0.6rem}
+.cost-card li::before{content:'';width:4px;height:4px;border-radius:50%;flex-shrink:0}
+.cost-card.manual li::before{background:var(--accent-light)}
+.cost-card.auto li::before{background:var(--teal-light)}
+.savings-banner{background:var(--ink);color:#fff;border-radius:12px;padding:2rem 2.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem}
+.savings-banner h3{font-family:var(--serif);font-size:1.5rem}
+.savings-banner .amount{font-family:var(--mono);font-size:2.2rem;color:var(--teal-light)}
+.map-section{background:var(--cream)}
+.map-wrapper{position:relative;margin-bottom:2rem}
+.us-map{width:100%;max-width:960px;margin:0 auto;display:block}
+.us-map path{fill:var(--sand);stroke:var(--cream);stroke-width:1;cursor:pointer;transition:fill 0.2s}
+.us-map path:hover{fill:var(--light-gray)}
+.us-map path.has-neg{fill:#e8c4bc}
+.us-map path.has-neg:hover{fill:var(--accent-light)}
+.us-map path.hot{fill:var(--accent);fill-opacity:0.7}
+.us-map path.hot:hover{fill:var(--accent)}
+.map-legend{display:flex;justify-content:center;gap:2rem;margin-bottom:2rem;flex-wrap:wrap}
+.map-legend-item{display:flex;align-items:center;gap:0.5rem;font-size:0.78rem;color:var(--warm-gray)}
+.map-legend-swatch{width:14px;height:14px;border-radius:3px}
+.state-panel{background:var(--paper);border-radius:16px;border:1px solid rgba(0,0,0,0.06);overflow:hidden;max-height:0;opacity:0;transition:max-height 0.5s ease,opacity 0.4s ease,margin 0.4s ease}
+.state-panel.open{max-height:5000px;opacity:1;margin-top:2rem}
+.state-panel-header{padding:2rem 2.5rem;border-bottom:1px solid rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.state-panel-title{font-family:var(--serif);font-size:1.8rem}
+.state-panel-stats{display:flex;gap:2rem}
+.state-panel-stat{text-align:center}
+.state-panel-stat-num{font-family:var(--mono);font-size:1.4rem;font-weight:500;display:block}
+.state-panel-stat-num.neg{color:var(--accent)}
+.state-panel-stat-num.pos{color:var(--teal)}
+.state-panel-stat-label{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--warm-gray)}
+.state-panel-close{width:36px;height:36px;border-radius:50%;border:1px solid var(--sand);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:var(--warm-gray);transition:all 0.2s}
+.state-panel-close:hover{background:var(--cream);color:var(--ink)}
+.facility-list{padding:1.5rem 2.5rem 2.5rem}
+.facility{padding:1.5rem 0;border-bottom:1px solid rgba(0,0,0,0.05)}
+.facility:last-child{border-bottom:none}
+.facility-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:0.8rem;flex-wrap:wrap;gap:0.5rem}
+.facility-name{font-weight:700;font-size:1rem}
+.facility-meta{font-size:0.78rem;color:var(--warm-gray)}
+.facility-rating{display:inline-flex;align-items:center;gap:0.3rem;font-family:var(--mono);font-size:0.82rem;padding:0.2rem 0.6rem;border-radius:6px;background:var(--cream)}
+.quote{margin:0.6rem 0;padding:0.8rem 1.2rem;border-left:3px solid var(--accent);background:rgba(200,66,44,0.04);border-radius:0 8px 8px 0;font-size:0.88rem;line-height:1.6;color:#3d3530}
+.quote-rating{font-family:var(--mono);font-size:0.72rem;color:var(--accent);font-weight:600;margin-bottom:0.3rem}
+.badge-neg{display:inline-block;padding:0.15rem 0.5rem;border-radius:4px;font-size:0.7rem;font-weight:600;background:rgba(200,66,44,0.1);color:var(--accent)}
+.badge-pos{display:inline-block;padding:0.15rem 0.5rem;border-radius:4px;font-size:0.7rem;font-weight:600;background:rgba(26,107,90,0.1);color:var(--teal)}
+.state-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.75rem;margin-top:2rem}
+.state-btn{padding:1rem;background:var(--paper);border:1px solid rgba(0,0,0,0.06);border-radius:10px;cursor:pointer;transition:all 0.2s;text-align:left}
+.state-btn:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,0.06)}
+.state-btn-name{font-weight:700;font-size:0.9rem;margin-bottom:0.3rem}
+.state-btn-info{font-size:0.75rem;color:var(--warm-gray)}
+.state-btn-neg{color:var(--accent);font-weight:600}
+.cta{background:linear-gradient(170deg,var(--ink),#1a2332);padding:6rem 2rem;text-align:center}
+.cta h2{font-family:var(--serif);font-size:clamp(2rem,4vw,3rem);color:#fff;margin-bottom:1rem}
+.cta p{color:rgba(255,255,255,0.5);font-size:1.05rem;max-width:550px;margin:0 auto 2.5rem;line-height:1.7}
+.cta-btn{display:inline-flex;align-items:center;gap:0.75rem;padding:1rem 2.5rem;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:var(--sans);font-size:1rem;font-weight:600;cursor:pointer;transition:all 0.3s;text-decoration:none}
+.cta-btn:hover{background:var(--accent-light);transform:translateY(-2px);box-shadow:0 8px 30px rgba(200,66,44,0.3)}
+footer{padding:2rem;text-align:center;font-size:0.75rem;color:var(--light-gray);background:var(--ink)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.animate{opacity:0;transform:translateY(30px)}
+.animate.visible{animation:fadeUp 0.7s ease forwards}
+.animate.d1{animation-delay:0.1s}.animate.d2{animation-delay:0.2s}.animate.d3{animation-delay:0.3s}
+@media(max-width:640px){.hero-stats{gap:2rem}.hero h1{font-size:2.4rem}.state-panel-header{padding:1.5rem}.facility-list{padding:1rem 1.5rem}.savings-banner{flex-direction:column;text-align:center}}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge animate visible">2026 Industry Report</div>
+    <h1 class="animate visible d1">The Hidden Cost of<br><em>Dirty Courts</em></h1>
+    <p class="hero-sub animate visible d2">A data-driven analysis of cleaning and hygiene reviews across 1,000 top indoor pickleball facilities in the United States.</p>
+    <div class="hero-stats animate visible d3">
+      <div class="hero-stat"><span class="hero-stat-num" data-count="1000">0</span><span class="hero-stat-label">Facilities Analyzed</span></div>
+      <div class="hero-stat"><span class="hero-stat-num" data-count="770">0</span><span class="hero-stat-label">Reviews Extracted</span></div>
+      <div class="hero-stat"><span class="hero-stat-num" data-count="256">0</span><span class="hero-stat-label">Negative Hygiene Reviews</span></div>
+      <div class="hero-stat"><span class="hero-stat-num">51</span><span class="hero-stat-label">States Covered</span></div>
+    </div>
+  </div>
+  <a href="#findings" class="hero-scroll">Scroll<span></span></a>
+</section>
+
+<section class="findings" id="findings">
+  <div class="container">
+    <div class="section-label animate">Key Findings</div>
+    <h2 class="section-title animate d1">What 1,000 facilities revealed</h2>
+    <p class="section-desc animate d2">We analyzed Google reviews for the largest indoor facilities across the U.S., filtering specifically for mentions of cleaning, hygiene, court condition, and maintenance.</p>
+    <div class="findings-grid">
+      <div class="finding-card animate d1"><div class="finding-num">37%</div><div class="finding-label">of facilities had cleaning mentioned in reviews</div><div class="finding-desc">373 out of 1,000 facilities had at least one review mentioning cleanliness, hygiene, or court maintenance.</div></div>
+      <div class="finding-card animate d2"><div class="finding-num">1 in 3</div><div class="finding-label">cleaning reviews were complaints</div><div class="finding-desc">Of 770 cleaning-related reviews, 256 (33%) were negative, citing dirty courts, poor restrooms, bad odors, debris, and lack of maintenance.</div></div>
+      <div class="finding-card animate d3"><div class="finding-num">175</div><div class="finding-label">facilities with negative hygiene reviews</div><div class="finding-desc">Nearly 1 in 5 top indoor facilities has at least one public complaint about cleanliness visible to every potential member.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="cost-section" id="cost">
+  <div class="container">
+    <div class="section-label animate">Cost Analysis</div>
+    <h2 class="section-title animate d1">Are you overpaying for court cleaning?</h2>
+    <p class="section-desc animate d2">Most facilities don't realize how much they spend on manual cleaning until they add up labor, supplies, downtime, and the hidden cost of inconsistency.</p>
+    <div class="cost-grid">
+      <div class="cost-card manual animate d1"><div class="cost-card-label">Current State</div><h3>Manual Cleaning</h3><div class="price">$2,000+</div><div class="price-sub">per month (10+ courts)</div><ul><li>8-12 staff hours per week on court maintenance</li><li>$15-20/hr fully loaded labor cost</li><li>Inconsistent results: clean at 9 AM, dirty by 4 PM</li><li>30 min - 1 hour per court per session</li><li>Staff juggling cleaning with other duties</li><li>Surface degradation from improper techniques</li></ul></div>
+      <div class="cost-card auto animate d2"><div class="cost-card-label">With Autopilot</div><h3>Autonomous Cleaning</h3><div class="price">$499-$1,299</div><div class="price-sub">per month</div><ul><li>Courts cleaned between every session automatically</li><li>Consistent quality with no human variability</li><li>No additional headcount required</li><li>Surface-safe cleaning preserves court life</li><li>Runs during off-hours without supervision</li><li>Data on cleaning frequency and coverage</li></ul></div>
+    </div>
+    <div class="savings-banner animate d3"><div><h3>Potential annual savings</h3><div style="font-size:0.85rem;color:rgba(255,255,255,0.5)">For a 10-court facility switching from manual to autonomous</div></div><div class="amount">$8,400 - $18,000+</div></div>
+  </div>
+</section>
+
+<section class="map-section" id="map">
+  <div class="container">
+    <div class="section-label animate">State-by-State Breakdown</div>
+    <h2 class="section-title animate d1">Explore cleaning reviews by state</h2>
+    <p class="section-desc animate d2">Click any state to see which facilities received negative cleaning reviews and what players actually said.</p>
+    <div class="map-legend">
+      <div class="map-legend-item"><div class="map-legend-swatch" style="background:var(--sand)"></div>No data</div>
+      <div class="map-legend-item"><div class="map-legend-swatch" style="background:#e8c4bc"></div>1-3 negative reviews</div>
+      <div class="map-legend-item"><div class="map-legend-swatch" style="background:var(--accent);opacity:0.7"></div>4+ negative reviews</div>
+    </div>
+    <div class="map-wrapper animate d1"><svg class="us-map" viewBox="0 0 960 600" id="usMap"></svg></div>
+    <div class="state-panel" id="statePanel">
+      <div class="state-panel-header">
+        <div><div class="state-panel-title" id="panelTitle">State</div></div>
+        <div class="state-panel-stats">
+          <div class="state-panel-stat"><span class="state-panel-stat-num" id="panelCourts">0</span><span class="state-panel-stat-label">Facilities</span></div>
+          <div class="state-panel-stat"><span class="state-panel-stat-num neg" id="panelNeg">0</span><span class="state-panel-stat-label">Negative Reviews</span></div>
+          <div class="state-panel-stat"><span class="state-panel-stat-num pos" id="panelPos">0</span><span class="state-panel-stat-label">Positive Reviews</span></div>
+        </div>
+        <button class="state-panel-close" id="closePanelBtn">&times;</button>
+      </div>
+      <div class="facility-list" id="facilityList"></div>
+    </div>
+    <div class="state-grid" id="stateGrid"></div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="container">
+    <h2 class="animate">Stop losing members to dirty courts</h2>
+    <p class="animate d1">See how autonomous court-cleaning robots can eliminate hygiene complaints and save your facility thousands per year.</p>
+    <a href="#" class="cta-btn animate d2">Book a Demo &rarr;</a>
+  </div>
+</section>
+
+<footer><p>2026 Autopilot. Data sourced from public Google reviews. Analysis of 1,000 top indoor facilities.</p></footer>
+
+<script>
+(function(){
+  var DATA=null,SL={};
+  var MP={"AL":"M628,432L632,479L632,481L614,483L612,477L608,482L609,432Z","AK":"M161,485L163,540L118,540L80,539L80,497L99,497L100,485ZM68,508L85,508L88,539L53,539Z","AZ":"M205,391L252,397L243,454L196,447L183,425L186,391Z","AR":"M564,400L609,397L612,440L609,432L563,436Z","CA":"M124,297L138,296L158,330L170,360L183,391L183,425L155,433L127,408L108,367L107,330L113,300Z","CO":"M298,300L370,305L367,347L295,342Z","CT":"M834,205L851,198L858,215L841,221Z","DE":"M803,278L815,272L815,293L803,298Z","FL":"M667,467L715,446L740,468L738,502L710,526L680,511L663,487Z","GA":"M660,395L700,395L700,446L667,467L650,447L645,421Z","HI":"M270,520L295,520L295,545L270,545Z","ID":"M210,176L238,172L253,237L230,278L205,258L198,207Z","IL":"M580,260L600,260L608,310L608,350L595,367L576,348L570,300Z","IN":"M618,262L642,260L645,340L618,345L612,300Z","IA":"M510,240L560,240L570,280L565,300L510,295L500,268Z","KS":"M395,330L490,335L490,370L392,366Z","KY":"M618,345L690,330L700,355L670,367L636,370L618,365Z","LA":"M564,462L600,450L612,477L600,500L570,500L555,480Z","ME":"M865,105L885,90L890,145L872,175L855,155Z","MD":"M753,280L800,268L815,293L803,298L780,300L753,290Z","MA":"M842,190L880,180L880,200L851,198L841,200Z","MI":"M595,175L630,165L655,195L650,240L620,250L615,218L590,210ZM585,210L595,175L575,170L563,195Z","MN":"M480,120L535,118L543,195L510,210L488,200L478,152Z","MS":"M595,400L614,400L614,465L600,480L595,465L585,445Z","MO":"M510,320L565,320L575,380L565,400L530,395L508,380L505,345Z","MT":"M260,115L350,118L348,180L260,178Z","NE":"M365,260L460,262L462,300L460,310L365,305Z","NV":"M155,230L198,232L198,335L183,350L155,320Z","NH":"M855,130L867,125L870,175L857,185L850,155Z","NJ":"M803,235L818,228L822,268L810,285L800,268Z","NM":"M252,397L305,400L305,460L248,455Z","NY":"M750,160L830,145L842,190L834,205L810,215L790,225L760,215L745,195Z","NC":"M660,360L755,345L770,368L730,388L700,395L660,395Z","ND":"M370,120L460,120L460,175L370,178Z","OH":"M650,250L695,245L700,300L690,330L653,340L642,295Z","OK":"M370,375L440,370L490,370L492,405L450,408L392,405L370,395Z","OR":"M108,155L170,152L170,205L155,230L125,225L108,200Z","PA":"M720,220L800,210L803,260L775,270L753,270L720,260Z","RI":"M855,200L865,197L866,212L856,215Z","SC":"M700,395L735,380L745,410L720,425L700,415Z","SD":"M370,178L460,175L462,240L365,240L365,200Z","TN":"M618,365L700,355L702,382L695,395L660,395L630,395L615,390Z","TX":"M340,415L440,410L492,405L500,455L490,500L460,530L405,540L360,510L335,480L340,440Z","UT":"M210,260L268,265L265,340L238,342L210,335Z","VT":"M842,120L855,115L857,175L842,185Z","VA":"M690,310L770,300L782,325L770,345L755,345L700,355L690,330Z","WA":"M135,85L190,82L195,150L165,155L130,142Z","WV":"M700,295L730,280L745,310L740,335L720,340L700,330Z","WI":"M530,145L575,140L595,175L585,210L575,215L560,215L543,195Z","WY":"M270,192L350,195L348,260L268,258Z","DC":"M775,292L780,288L783,295L778,298Z"};
+
+  function buildMap(){var svg=document.getElementById('usMap');Object.keys(MP).forEach(function(a){var p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d',MP[a]);p.setAttribute('data-state',a);p.addEventListener('click',function(){openState(a)});var t=document.createElementNS('http://www.w3.org/2000/svg','title');t.textContent=a;p.appendChild(t);svg.appendChild(p)})}
+
+  function colorMap(){if(!DATA)return;document.querySelectorAll('.us-map path').forEach(function(p){var a=p.getAttribute('data-state'),s=SL[a];if(s&&s.neg>=4)p.classList.add('hot');else if(s&&s.neg>0)p.classList.add('has-neg')})}
+
+  function buildStateGrid(){var g=document.getElementById('stateGrid');if(!DATA)return;DATA.states.filter(function(s){return s.neg>0}).forEach(function(s){var b=document.createElement('div');b.className='state-btn';b.addEventListener('click',function(){openState(s.abbr)});var n=document.createElement('div');n.className='state-btn-name';n.textContent=s.name||s.abbr;var i=document.createElement('div');i.className='state-btn-info';i.textContent=s.courts+' facilities \u00B7 ';var sp=document.createElement('span');sp.className='state-btn-neg';sp.textContent=s.neg+' negative';i.appendChild(sp);b.appendChild(n);b.appendChild(i);g.appendChild(b)})}
+
+  function openState(abbr){
+    var state=SL[abbr];if(!state||state.facilities.length===0)return;
+    document.getElementById('panelTitle').textContent=state.name||abbr;
+    document.getElementById('panelCourts').textContent=state.courts;
+    document.getElementById('panelNeg').textContent=state.neg;
+    document.getElementById('panelPos').textContent=state.pos;
+    var list=document.getElementById('facilityList');
+    while(list.firstChild)list.removeChild(list.firstChild);
+    state.facilities.forEach(function(f){
+      var fd=document.createElement('div');fd.className='facility';
+      var hd=document.createElement('div');hd.className='facility-header';
+      var lf=document.createElement('div');
+      var nm=document.createElement('div');nm.className='facility-name';nm.textContent=f.name;
+      var mt=document.createElement('div');mt.className='facility-meta';mt.textContent=f.city+' \u00B7 '+f.courts+' indoor courts';
+      lf.appendChild(nm);lf.appendChild(mt);
+      var rt=document.createElement('div');
+      if(f.rating){var ra=document.createElement('span');ra.className='facility-rating';ra.textContent=f.rating+' \u2605';rt.appendChild(ra);rt.appendChild(document.createTextNode(' '))}
+      var nb=document.createElement('span');nb.className='badge-neg';nb.textContent=f.neg+' negative';rt.appendChild(nb);
+      if(f.pos){rt.appendChild(document.createTextNode(' '));var pb=document.createElement('span');pb.className='badge-pos';pb.textContent=f.pos+' positive';rt.appendChild(pb)}
+      hd.appendChild(lf);hd.appendChild(rt);fd.appendChild(hd);
+      f.quotes.forEach(function(q){
+        var qd=document.createElement('div');qd.className='quote';
+        var rm=q.match(/^\[(\d\.?\d?)\/5\]/);var rr=rm?rm[1]:'';var qt=rm?q.replace(rm[0],'').trim():q;
+        if(rr){var rd=document.createElement('div');rd.className='quote-rating';rd.textContent=rr+'/5 stars';qd.appendChild(rd)}
+        qd.appendChild(document.createTextNode(qt));fd.appendChild(qd)});
+      if(f.summary){var sd=document.createElement('div');sd.style.cssText='font-size:0.82rem;color:var(--warm-gray);margin-top:0.8rem;font-style:italic';sd.textContent=f.summary;fd.appendChild(sd)}
+      list.appendChild(fd)});
+    var panel=document.getElementById('statePanel');panel.classList.add('open');
+    setTimeout(function(){panel.scrollIntoView({behavior:'smooth',block:'start'})},100)}
+
+  document.getElementById('closePanelBtn').addEventListener('click',function(){document.getElementById('statePanel').classList.remove('open')});
+
+  document.querySelectorAll('[data-count]').forEach(function(el){
+    var target=parseInt(el.dataset.count),start=performance.now();
+    function tick(now){var p=Math.min((now-start)/2000,1);el.textContent=Math.round((1-Math.pow(1-p,3))*target).toLocaleString();if(p<1)requestAnimationFrame(tick)}
+    setTimeout(function(){requestAnimationFrame(tick)},500)});
+
+  var obs=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting)en.target.classList.add('visible')})},{threshold:0.1});
+  document.querySelectorAll('.animate').forEach(function(el){obs.observe(el)});
+
+  buildMap();
+  fetch('data.json').then(function(r){return r.json()}).then(function(d){DATA=d;d.states.forEach(function(s){SL[s.abbr]=s});buildStateGrid();colorMap()});
+})();
+</script>
+</body>
+</html>
